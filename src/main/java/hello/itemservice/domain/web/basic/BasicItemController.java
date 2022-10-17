@@ -103,10 +103,24 @@ public class BasicItemController {
      * @param item
      * @return
      */
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV5(Item item){
         itemRepository.save(item);
         return "redirect:/basic/items/" + item.getId();
+    }
+
+    /**
+     * redirectAttributes 를 사용하여 인코딩뿐만 아니라 쿼리 파라미터로 url에 정보
+     * @param item
+     * @param redirectAttributes
+     * @return
+     */
+    @PostMapping("/add")
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes){
+        itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", item.getId());
+        redirectAttributes.addAttribute("status", true); // 쿼리 파라미터 형식으로 들어감 (?status=true)
+        return "redirect:/basic/items/{itemId}";
     }
 
     @GetMapping("{itemId}/edit")
