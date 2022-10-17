@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -88,13 +89,24 @@ public class BasicItemController {
      * @param item
      * @return
      */
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV4(Item item){
         itemRepository.save(item);
 
 //        model.addAttribute("item", item); //자동 추가, 생략 가능
 
         return "basic/item";
+    }
+
+    /**
+     * 클라이언트에서 중복 post 요청을 막기위한 redirect 처리
+     * @param item
+     * @return
+     */
+    @PostMapping("/add")
+    public String addItemV5(Item item){
+        itemRepository.save(item);
+        return "redirect:/basic/items/" + item.getId();
     }
 
     @GetMapping("{itemId}/edit")
